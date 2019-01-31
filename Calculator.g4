@@ -12,7 +12,7 @@ exprList: topExpr ( ';' topExpr)* ';'? ;
 
 topExpr: varDef | expr{ System.out.println("result: " + Integer.toString($expr.i)); };
 
-varDef: ID '=' val=expr {variables.put($ID.toString(), $val.i);};
+varDef: ID '=' val=expr {variables.put($ID.text, $val.i);};
 
 expr returns [int i]: 
     el=expr op='*' er=expr { $i=$el.i*$er.i; }
@@ -21,12 +21,15 @@ expr returns [int i]:
     | el=expr op='-' er=expr { $i=$el.i-$er.i; }
     | INT { $i=Integer.parseInt($INT.text); }
     | ID {
-            if(variables.get($ID.toString()) != null)
-                $i= variables.get($ID.toString());
+            if(variables.get($ID.text) != null)
+                $i= variables.get($ID.text);
             else
                 System.out.println("Undeclared variable.");
         }            
     | '(' e=expr ')'
+    | '!' expr { $i = !expr.i; }
+    | el=expr op='&&' er=expr { $i = $el.i && $er.i; }
+    | el=expr op='||' er=expr { $i = $el.i || $er.i; }
     ;
 
 ID: [_A-Za-z]+; // Variables and other tokens
