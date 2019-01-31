@@ -22,17 +22,17 @@ expr returns [int i]:
     | INT { $i=Integer.parseInt($INT.text); }
     | ID {
             if(variables.get($ID.text) != null)
-                $i= variables.get($ID.text);
+                $i = variables.get($ID.text);
             else
                 System.out.println("Undeclared variable.");
         }            
     | '(' e=expr ')'
-    | '!' expr { $i = !expr.i; }
-    | el=expr op='&&' er=expr { $i = $el.i && $er.i; }
-    | el=expr op='||' er=expr { $i = $el.i || $er.i; }
+    | '!' expr { $i = $expr.i != 0 ? 1 : 0 ;}
+    | el=expr op='&&' er=expr { $i = ($el.i != 0 && $er.i != 0) ? 1 : 0; }
+    | el=expr op='||' er=expr {$i = ($el.i != 0 || $er.i != 0) ? 1 : 0; }
     ;
 
 ID: [_A-Za-z]+; // Variables and other tokens
-INT: [0-9]+ ; // Recognize Integers
+INT: '-'?[0-9]+ ; // Recognize Integers
 WS : [ \t\r\n]+ -> skip ; // Skip White Space
 COM : '/*' (.)*? '*/' -> skip ; // Skip Comments
