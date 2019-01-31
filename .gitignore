@@ -1,5 +1,10 @@
 # Compiled class file
 *.class
+*.java
+
+# Antlr4 files
+*.interp
+*.tokens
 
 # Log file
 *.log
