@@ -9,10 +9,11 @@ grammar Calculator;
     HashMap<String, Integer> variables = new HashMap<String, Integer>();
 }
 
+// Top-Most Expression Tree Nodes
 exprList: topExpr ( ';' topExpr)* ';'? ; 
-
 topExpr: varDef | expr{ System.out.println("result: " + Integer.toString($expr.i)); };
 
+// Variable Definitions
 varDef: ID '=' val=expr {variables.put($ID.text, $val.i);};
 
 expr returns [int i]: 
@@ -33,23 +34,29 @@ expr returns [int i]:
     | el=expr op='||' er=expr {$i = ($el.i != 0 || $er.i != 0) ? 1 : 0; }
     ;
 
-spexp returns [int i]:
-    opl= 'sqrt(' /*todo var */ opr=')'{ 
-            if ($var.i < 0)
+spexp returns [double i]:
+    SQRT_L value=expr FUNC_R
+     { 
+            if ($value.i < 0)
                 System.out.println("Error: expression must be positive");
             else
-                $i= Math.sqrt($var.i); 
-    };
-
-
-libfun returns [int i]:
-    opl= 's(' var=libfun opr=')'{ $i= Math.sin($var.i); }
-    | opl= 'c(' var=libfun opr=')'{ $i= Math.cos($var.i); }
-    | opl= 'l(' var=libfun opr=')'{ $i= Math.log($var.i); }
-    | opl= 'e(' var=libfun opr=')'{ $i= Math.exp($var.i); }
+                $i = Math.sqrt($value.i); 
+        }
+    |
     ;
 
-ID: [_A-Za-z]+; // Variables and other tokens
+
+libfun returns [double i]:
+    's(' var=libfun ')'{ $i= Math.sin($var.i); }
+    | 'c(' var=libfun ')'{ $i= Math.cos($var.i); }
+    | 'l(' var=libfun ')'{ $i= Math.log($var.i); }
+    | 'e(' var=libfun ')'{ $i= Math.exp($var.i); }
+    ;
+
 INT: '-'?[0-9]+ ; // Recognize Integers
-WS : [ \t\r\n]+ -> skip ; // Skip White Space
+WS : SPACE+ -> skip ; // Skip White Space
 COM : '/*' (.)*? '*/' -> skip ; // Skip Comments
+SPACE: [ \t\r\n];
+SQRT_L: 'sqrt'SPACE*'(';
+FUNC_R: SPACE*')';
+ID: [_A-Za-z]+;
