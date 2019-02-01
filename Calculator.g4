@@ -39,7 +39,7 @@ spexp returns [int i]:
                 System.out.println("Error: expression must be positive");
             else
                 $i= Math.sqrt($var.i); 
-        }
+    };
 
 
 libfun returns [int i]:
