@@ -2,6 +2,7 @@ grammar Calculator;
 
 @header {
     import java.util.HashMap;
+    import java.lang.Math;
 }
 
 @members {
@@ -30,6 +31,22 @@ expr returns [int i]:
     | '!' expr { $i = $expr.i != 0 ? 1 : 0 ;}
     | el=expr op='&&' er=expr { $i = ($el.i != 0 && $er.i != 0) ? 1 : 0; }
     | el=expr op='||' er=expr {$i = ($el.i != 0 || $er.i != 0) ? 1 : 0; }
+    ;
+
+spexp returns [int i]:
+    opl= 'sqrt(' /*todo var */ opr=')'{ 
+            if ($var.i < 0)
+                System.out.println("Error: expression must be positive");
+            else
+                $i= Math.sqrt($var.i); 
+        }
+
+
+libfun returns [int i]:
+    opl= 's(' var=libfun opr=')'{ $i= Math.sin($var.i); }
+    | opl= 'c(' var=libfun opr=')'{ $i= Math.cos($var.i); }
+    | opl= 'l(' var=libfun opr=')'{ $i= Math.log($var.i); }
+    | opl= 'e(' var=libfun opr=')'{ $i= Math.exp($var.i); }
     ;
 
 ID: [_A-Za-z]+; // Variables and other tokens
