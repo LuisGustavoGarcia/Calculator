@@ -1,0 +1,17 @@
+/* Special Expression Unit Tests */
+
+/* Sqrt */
+sqrt(4);
+sqrt (4);
+sqrt(10);
+
+/* read */
+i = read();
+i + 1;
+read() + 1;
+
+/* Bad SQRT case, this will close the program */
+sqrt(-4);
+
+/* This expression should not be evaluated, since the previous one closes the program. */
+1 + 2;

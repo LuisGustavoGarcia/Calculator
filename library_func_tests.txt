@@ -1,0 +1,19 @@
+/* Library Function Unit Tests */
+
+s(45);
+s (45);
+
+c(180);
+c( 180);
+
+l( 10);
+l (10);
+
+e(2);
+e (2);
+
+/* This is an invalid expression, and should close the program. */
+l (-1);
+
+/* This expression should not run */
+1 + 1;
